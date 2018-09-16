@@ -1,0 +1,80 @@
+NAME: CSE522 Assignment 3
+_______________________________________________________________________________________________________________________________________________________________________________________________________
+
+TEAM-02
+ 
+Hena Shah (1213348511)
+Nidhi Dubey(1213031246)
+_______________________________________________________________________________________________________________________________________________________________________________________________________
+
+REPOSITORY CONTENTS:
+
+-> README 
+-> measure_02.zip
+-> Report
+
+_______________________________________________________________________________________________________________________________________________________________________________________________________
+
+ABOUT: 
+
+Our program performs 3 measurements in sequence: interrupt latency without background computing, interrupt latency with background computing, and context switching overhead RTOS (Zephyr version 1.10.0) : interrupt latency (with and without background computation) and context switching overhead. Interrupt latency is the total delay between the interrupt signal being asserted and the start of the interrupt service routine execution. This delay may be extended if an interrupt arrives when the RTOS is in a non-preemptive critical region. As for context switching overhead, it is the delay of context switching process of saving the context of the executing thread, restoring the context of the new thread, and starting the execution of the new thread.  We are using x86’s Time Stamp Counter (TSC) to read instances.We measure 500 samples for each measurement which is stored in separate buffers. We have registered a shell module to print data randomly from the buffer after all the tasks execute sequentially. We have also prepared a report for show graphs for the above explained three measurements.
+
+_______________________________________________________________________________________________________________________________________________________________________________________________________
+
+SYSTEM REQUIREMENTS:
+
+-> LED 
+-> Zephyr 1.10.0 and SDK: Zephyr-0.9.2
+-> CMake version 3.8.2 or higher is required
+-> Intel Galileo Gen2
+____________________________________________________________________________________________________________________________________________________________________________________________________
+
+SETUP:
+
+-> After installing Zephyr, format a microSD as FAT
+-> Create the following directories
+   efi
+   efi/boot
+   kernel
+-> after cloning find the binary at $ZEPHYR_BASE/boards/x86/galileo/support/grub/bin/grub.efi and copy it to $SDCARD/efi/boot and rename it to bootia32.efi.
+-> Create a $SDCARD/efi/boot/grub.cfg file containing: 
+   set default=0
+   set timeout=10
+
+   menuentry "Zephyr Kernel" {
+   multiboot /kernel/zephyr.strip
+   }
+
+-> Make sure that cmake version is 3.8.2 or higher else open terminal in your folder and enter:
+-> source <zephyr git clone location>/zephyr-env.sh
+-> cmake --version
+-> export ZEPHYR_GCC_VARIANT=zephyr
+-> export ZEPHYR_SDK_INSTALL_DIR=<sdk installation directory>
+-> export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+
+For full details refer this link: http://docs.zephyrproject.org/1.10.0/getting_started/installation_linux.html
+For full details refer this:  http://docs.zephyrproject.org/1.10.0/boards/x86/galileo/doc/galileo.html
+
+-> Connect GPIO pins on Galileo Gen 2, IO5 is PWM and IO0 is input pin.
+
+
+
+_______________________________________________________________________________________________________________________________________________________________________________________________________
+
+COMPILATION & EXECUTION:
+
+-> type: cd $ZEPHYR_BASE/samples/measure_02
+-> mkdir build
+-> cd build
+-> cmake -DBOARD=galileo ..
+-> make
+
+Now copy zephyr.strip file to in $ZEPHYR_BASE/samples/measure_n/build/zephyr to $SDCARD/kernel and put in board and reboot.
+
+Once all the tasks execute and asks you to enter shell commnands type:
+-> select print_module 
+-> print
+
+___________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
